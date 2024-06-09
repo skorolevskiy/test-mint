@@ -103,7 +103,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (!User) {
         return getResponse(ResponseType.ERROR);
     } else {
-        wallet = User.wallet;
+        wallet = User.wallet.slice(1, -1);
     }
 
     console.warn(MINTER_PRIVATE_KEY);
