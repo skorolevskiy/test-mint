@@ -15,7 +15,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { getUser, updateRecieveDrop } from './../types';
 
 const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
-const MINTER_PRIVATE_KEY: Hex | undefined = process.env.MINTER_PRIVATE_KEY as Hex | undefined;
+const MINTER_PRIVATE_KEY = process.env.MINTER_PRIVATE_KEY as Hex | undefined;
 
 const transport = http(process.env.RPC_URL);
 
@@ -98,14 +98,6 @@ export async function POST(req: NextRequest): Promise<Response> {
     const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
     const power_badge = status?.action?.interactor?.power_badge ? status.action.interactor.power_badge : null;
 
-    // Try minting a new token
-    // const { request } = await publicClient.simulateContract({
-    //     account: privateKeyToAccount(MINTER_PRIVATE_KEY),
-    //   address: CONTRACT_ADDRESS,
-    //   abi: abi,
-    //   functionName: 'transferTo',
-    // });
-
     const User = await getUser(fid_new);
     let wallet;
     if (!User) {
@@ -113,6 +105,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     } else {
         wallet = User.wallet;
     }
+
+    console.warn(MINTER_PRIVATE_KEY);
 
     let tokens: bigint = parseEther("100");
 
