@@ -1,9 +1,14 @@
 import { CHAIN, CONTRACT_ADDRESS, SITE_URL } from '@/config';
 import { NextRequest, NextResponse } from 'next/server';
+import dataJson from './eligible.json'
 
 const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
 
 export const dynamic = 'force-dynamic';
+
+interface FidEntry {
+    fid: number;
+  }
 
 export async function POST(req: NextRequest): Promise<Response> {
   try {
@@ -20,8 +25,15 @@ export async function POST(req: NextRequest): Promise<Response> {
     const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
     const power_badge = status?.action?.interactor?.power_badge ? status.action.interactor.power_badge : null;
 
+    const data: FidEntry[] = dataJson;
 
-    return getResponse(ResponseType.SUCCESS);
+    const result = findFid(data, Number(fid_new));
+
+    if (!result) {
+        return getResponse(ResponseType.NOT_ELIGIBLE);
+    }
+
+    return getResponse(ResponseType.ELIGIBLE);
   } catch (error) {
     console.error(error);
     return getResponse(ResponseType.ERROR);
@@ -31,12 +43,16 @@ export async function POST(req: NextRequest): Promise<Response> {
 enum ResponseType {
   SUCCESS,
   ERROR,
+  NOT_ELIGIBLE,
+  ELIGIBLE
 }
 
 function getResponse(type: ResponseType) {
   const IMAGE = {
     [ResponseType.SUCCESS]: 'status/success.png',
     [ResponseType.ERROR]: 'status/error.png',
+    [ResponseType.NOT_ELIGIBLE]: 'status/error.png',
+    [ResponseType.ELIGIBLE]: 'status/error.png',
   }[type];
   const shouldRetry =
     type === ResponseType.ERROR;
@@ -77,3 +93,7 @@ async function validateFrameRequest(data: string | undefined) {
     .then((response) => response.json())
     .catch((err) => console.error(err));
 }
+
+const findFid = (data: FidEntry[], fidToFind: number): boolean => {
+    return data.some(entry => entry.fid === fidToFind);
+  };

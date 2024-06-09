@@ -11,19 +11,13 @@ import {
   formatUnits
 } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
+import { getUser } from './types';
 
 const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
-const MINTER_PRIVATE_KEY = process.env.MINTER_PRIVATE_KEY as Hex | undefined;
-const HAS_KV = !!process.env.KV_URL;
 
 const transport = http(process.env.RPC_URL);
 
 const publicClient = createPublicClient({
-  chain: CHAIN,
-  transport,
-});
-
-const walletClient = createWalletClient({
   chain: CHAIN,
   transport,
 });
@@ -51,6 +45,8 @@ export async function POST(req: NextRequest): Promise<Response> {
       return getResponse(ResponseType.RECAST);
     }
 
+    const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
+    let address: string, recieveDrop: boolean;
     // Check if user has an address connected
     const address1: Address | undefined =
         status?.action?.interactor?.verifications?.[0];
@@ -88,69 +84,32 @@ export async function POST(req: NextRequest): Promise<Response> {
     const threshold: number = 24000;
 	
     if (balanceInTokens1 >= threshold || balanceInTokens2 >= threshold) {
-    console.warn(balanceInTokens1);
-    console.warn(balanceInTokens2);
-    // if (balanceInTokens1 >= threshold) {
-    // 	await updateWallet(fid_new, JSON.stringify(address1));
-    // } else if (balanceInTokens2 >= threshold) {
-    // 	await updateWallet(fid_new, JSON.stringify(address2));
-    // }
+        console.warn(balanceInTokens1);
+        console.warn(balanceInTokens2);
+        if (balanceInTokens1 >= threshold) {
+        	//await updateWallet(fid_new, JSON.stringify(address1));
+            address = JSON.stringify(address1);
+        } else if (balanceInTokens2 >= threshold) {
+        	//await updateWallet(fid_new, JSON.stringify(address2));
+            address = JSON.stringify(address2);
+        }
     } else {
-    console.warn('1 need more token ' + balanceInTokens1 + ' - ' + address1);
-    console.warn('2 need more token ' + balanceInTokens2 + ' - ' + address2);
-    return getResponse(ResponseType.NEED_TOKEN);
+        console.warn('1 need more token ' + balanceInTokens1 + ' - ' + address1);
+        console.warn('2 need more token ' + balanceInTokens2 + ' - ' + address2);
+        return getResponse(ResponseType.NEED_TOKEN);
     }
 
-    const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
+    const User = await getUser(fid_new);
 
-    // Check if user has minted before
-    // if (HAS_KV) {
-    //   const prevMintHash = await kv.get<Hex>(`mint:${address}`);
+    if (!User) {
+        return getResponse(ResponseType.ERROR);
+    } else {
+        recieveDrop = User.recieveDrop;
+    }
 
-    //   if (prevMintHash) {
-    //     return getResponse(ResponseType.ALREADY_MINTED);
-    //   }
-    // }
-
-    // // Check if user has a balance
-    // const balance: any = await publicClient.readContract({
-    //   abi: abi,
-    //   address: CONTRACT_ADDRESS,
-    //   functionName: 'balanceOf',
-    //   args: [address],
-    // });
-
-    // if (balance > 0n) {
-    //   return getResponse(ResponseType.ALREADY_MINTED);
-    // }
-
-    // // Try minting a new token
-    // const { request } = await publicClient.simulateContract({
-    //   address: CONTRACT_ADDRESS,
-    //   abi: abi,
-    //   functionName: 'transferTo',
-    //   args: [address, 1n, '0x'],
-    //   account: privateKeyToAccount(MINTER_PRIVATE_KEY),
-    // });
-
-    // if (!request) {
-    //   throw new Error('Could not simulate contract');
-    // }
-
-    // try {
-    //   const hash = await walletClient.writeContract(request);
-
-    //   if (HAS_KV) {
-    //     await kv.set(`mint:${address}`, hash);
-    //   }
-    // } catch (error) {
-    //   if (
-    //     error instanceof TransactionExecutionError &&
-    //     error.details.startsWith('gas required exceeds allowance')
-    //   ) {
-    //     return getResponse(ResponseType.OUT_OF_GAS);
-    //   }
-    // }
+    if (recieveDrop) {
+        return getResponse(ResponseType.ALREADY_MINTED);
+    }
 
     return getResponse(ResponseType.SUCCESS);
   } catch (error) {
@@ -178,7 +137,7 @@ function getResponse(type: ResponseType) {
     [ResponseType.ERROR]: 'status/error.png',
   }[type];
   const shouldRetry =
-    type === ResponseType.ERROR || type === ResponseType.RECAST;
+    type === ResponseType.ERROR || type === ResponseType.RECAST || type === ResponseType.ALREADY_MINTED;
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
     <meta property="fc:frame:image" content="${SITE_URL}/${IMAGE}" />
