@@ -88,7 +88,7 @@ export async function GET(request: Request) {
                             whiteSpace: 'pre-wrap',
                             display: 'flex',
                             flexDirection: 'column',
-                            width: '560px',
+                            width: '620px',
                             gap: '24px'
                         }}
                     >

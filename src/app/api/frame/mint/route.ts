@@ -120,22 +120,21 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     if (!request) {
       throw new Error('Could not simulate contract');
+    } else {
+      await updateRecieveDrop(fid_new, true);
     }
 
     console.warn(request);
 
-    try {
-        const hash = await walletClient.writeContract(request);
+    // try {
+    //     const hash = await walletClient.writeContract(request);
 
-        if (hash) {
-            await updateRecieveDrop(fid_new, true);
-        }
-    //   if (HAS_KV) {
-    //     await kv.set(`mint:${address}`, hash);
-    //   }
-    } catch (error) {
-        return getResponse(ResponseType.ERROR);
-    }
+    //     if (hash) {
+    //         await updateRecieveDrop(fid_new, true);
+    //     }
+    // } catch (error) {
+    //     return getResponse(ResponseType.ERROR);
+    // }
 
     return getResponse(ResponseType.SUCCESS);
   } catch (error) {
