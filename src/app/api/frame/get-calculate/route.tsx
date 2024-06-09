@@ -1,5 +1,6 @@
 import { SITE_URL } from '@/config';
 import { ImageResponse } from 'next/og';
+import Image from 'next/image';
 //import { getTopPlayers, getUser, getUserPosition } from '../types';
 // App router includes @vercel/og.
 // No need to install it.
@@ -102,7 +103,7 @@ export async function GET(request: Request) {
 						}}
 					>
 						<p>Build by PILL, dev @eat</p>
-						<img
+						<Image
 							alt="pill"
 							width="64"
 							height="64"
