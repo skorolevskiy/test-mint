@@ -108,7 +108,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     console.warn(MINTER_PRIVATE_KEY);
 
-    const privateKey: Hex = MINTER_PRIVATE_KEY;
+    const privateKey: Hex = MINTER_PRIVATE_KEY; 
 
     let tokens: bigint = parseEther("100");
 
