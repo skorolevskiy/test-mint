@@ -110,13 +110,13 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     const privateKey: Hex = MINTER_PRIVATE_KEY; 
 
-    let tokens: bigint = parseEther("100");
-
-    const request: any = await publicClient.call({
+    const request: any = await publicClient.simulateContract({
+        address: CONTRACT_ADDRESS,
+        abi: abi,
         account: privateKeyToAccount(privateKey),
-        data: CONTRACT_ADDRESS,
-        to: wallet,
-        value: tokens
+        functionName: 'transferFrom',
+        args: [ wallet ],
+        value: parseEther("100"),
       })
        
       const serializedTransaction = await walletClient.signTransaction(request);
