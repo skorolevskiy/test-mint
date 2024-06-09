@@ -15,7 +15,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { getUser, updateRecieveDrop } from './../types';
 
 const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
-const MINTER_PRIVATE_KEY = process.env.MINTER_PRIVATE_KEY as Hex | undefined;
+const MINTER_PRIVATE_KEY: Hex | undefined = process.env.MINTER_PRIVATE_KEY as Hex | undefined;
 
 const transport = http(process.env.RPC_URL);
 
