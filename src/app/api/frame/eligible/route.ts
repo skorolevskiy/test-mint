@@ -51,7 +51,7 @@ function getResponse(type: ResponseType) {
   const IMAGE = {
     [ResponseType.SUCCESS]: 'status/success.png',
     [ResponseType.ERROR]: 'status/error.png',
-    [ResponseType.NOT_ELIGIBLE]: 'status/not-eligible.png',
+    [ResponseType.NOT_ELIGIBLE]: 'status/no-eligible.png',
     [ResponseType.ELIGIBLE]: 'status/eligible.png',
   }[type];
   const shouldRetry =
