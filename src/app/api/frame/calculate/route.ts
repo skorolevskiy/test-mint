@@ -60,6 +60,7 @@ function getResponse(type: ResponseType) {
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
     <meta property="fc:frame:image" content="${SITE_URL}/${IMAGE}" />
+    <meta property="fc:frame:image:aspect_ratio" content="1:1" />
     <meta property="fc:frame:post_url" content="${SITE_URL}/api/frame" />
     ${
       shouldRetry
