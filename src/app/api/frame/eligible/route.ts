@@ -55,7 +55,7 @@ function getResponse(type: ResponseType) {
     [ResponseType.ELIGIBLE]: 'status/eligible.png',
   }[type];
   const shouldRetry =
-    type === ResponseType.ERROR;
+    type === ResponseType.ERROR || type === ResponseType.NOT_ELIGIBLE;
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
     <meta property="fc:frame:image" content="${SITE_URL}/${IMAGE}" />
