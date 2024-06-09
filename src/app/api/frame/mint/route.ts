@@ -112,15 +112,14 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     let tokens: bigint = parseEther("100");
 
-    const request: any = await publicClient.prepareTransactionRequest({
+    const request: any = await publicClient.call({
         account: privateKeyToAccount(privateKey),
+        data: CONTRACT_ADDRESS,
         to: wallet,
         value: tokens
       })
        
-      const serializedTransaction = await walletClient.signTransaction(request)
-       
-      
+      const serializedTransaction = await walletClient.signTransaction(request);
 
     if (!request) {
       throw new Error('Could not simulate contract');
