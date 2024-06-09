@@ -1,11 +1,10 @@
 import { SITE_URL } from '@/config';
 import { ImageResponse } from 'next/og';
-import Image from 'next/image';
 //import { getTopPlayers, getUser, getUserPosition } from '../types';
 // App router includes @vercel/og.
 // No need to install it.
 
-let fid: string, username: string, points: number, position: number;
+let fid: string | null, username: string, points: number, position: number;
 
 interface Player {
 	fid: string;
@@ -14,15 +13,15 @@ interface Player {
 }
 
 export async function GET(request: Request) {
-	const fontData = await fetch(
-		new URL(SITE_URL + '/assets/GeistMonoRegular.ttf', import.meta.url),
-	  ).then((res) => res.arrayBuffer());
+	// const fontData = await fetch(
+	// 	new URL(SITE_URL + '/assets/GeistMonoRegular.ttf', import.meta.url),
+	//   ).then((res) => res.arrayBuffer());
 
 	try {
 		const { searchParams } = new URL(request.url);
 
 		const hasFid = searchParams.has('fid');
-		const fid = hasFid ? searchParams.get('fid') : null;
+		fid = hasFid ? searchParams.get('fid') : null;
 
 		// const user = await getUser(fid);
 		// position = Number(await getUserPosition(fid));
@@ -51,7 +50,7 @@ export async function GET(request: Request) {
 						padding: '50px 50px',
 						textAlign: 'center',
 						display: 'flex',
-						justifyContent: 'flex-start',
+						justifyContent: 'space-between',
 						alignItems: 'center',
 						flexDirection: 'column',
 						flexWrap: 'nowrap',
@@ -103,7 +102,7 @@ export async function GET(request: Request) {
 						}}
 					>
 						<p>Build by PILL, dev @eat</p>
-						<Image
+						<img
 							alt="pill"
 							width="64"
 							height="64"
@@ -115,13 +114,13 @@ export async function GET(request: Request) {
 			{
 				width: 960,
 				height: 960,
-				fonts: [
-					{
-					  name: 'Geist',
-					  data: fontData,
-					  style: 'normal',
-					},
-				  ],
+				// fonts: [
+				// 	{
+				// 	  name: 'Geist',
+				// 	  data: fontData,
+				// 	  style: 'normal',
+				// 	},
+				//   ],
 			},
 		);
 	} catch (e: any) {
