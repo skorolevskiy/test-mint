@@ -113,8 +113,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     const request: any = await publicClient.simulateContract({
         address: CONTRACT_ADDRESS,
         abi: abi,
-        functionName: 'transferFrom',
-        args: [ account.address, wallet, parseEther("100")],
+        functionName: 'transfer',
+        args: [ wallet, parseEther("100")],
         account: account,
       })
        
