@@ -1,10 +1,10 @@
 import { SITE_URL } from '@/config';
 import { ImageResponse } from 'next/og';
-//import { getTopPlayers, getUser, getUserPosition } from '../types';
+import { getUser } from '../types';
 // App router includes @vercel/og.
 // No need to install it.
 
-let fid: string | null, username: string, points: number, position: number;
+let fid: string | null, username: string, points: number, power: string | null, tokens: number;
 
 interface Player {
 	fid: string;
@@ -13,9 +13,9 @@ interface Player {
 }
 
 export async function GET(request: Request) {
-	// const fontData = await fetch(
-	// 	new URL(SITE_URL + '/assets/GeistMonoRegular.ttf', import.meta.url),
-	//   ).then((res) => res.arrayBuffer());
+	const fontData = await fetch(
+		new URL(SITE_URL + '/assets/GeistMonoRegular.ttf', import.meta.url),
+	  ).then((res) => res.arrayBuffer());
 
 	try {
 		const { searchParams } = new URL(request.url);
@@ -23,17 +23,22 @@ export async function GET(request: Request) {
 		const hasFid = searchParams.has('fid');
 		fid = hasFid ? searchParams.get('fid') : null;
 
-		// const user = await getUser(fid);
-		// position = Number(await getUserPosition(fid));
+        const hasPower = searchParams.has('power');
+		power = hasPower ? searchParams.get('power') : null;
 
-		// console.log(typeof position);
+		const user = await getUser(fid);
 
-		// if (!user) {
-		// 	points = 0;
-		// } else {
-		// 	username = (user.username).replace(/"/g, '');
-		// 	points = user.points;
-		// }
+		if (!user) {
+			points = 0;
+		} else {
+			points = user.points;
+		}
+
+        if(power === "true") {
+            tokens = points * 2;
+        } else {
+            tokens = points;
+        }
 
 		// const topPlayers: Player[] = await getTopPlayers();
 
@@ -59,7 +64,7 @@ export async function GET(request: Request) {
 					<div
 						style={{
 							fontFamily: 'Geist, GeistSans, Inter, "Material Icons"',
-							fontSize: 40,
+							fontSize: 60,
 							fontStyle: 'normal',
 							fontWeight: 700,
 							letterSpacing: '-0.025em',
@@ -68,7 +73,7 @@ export async function GET(request: Request) {
 							whiteSpace: 'pre-wrap',
 						}}
 					>
-						Calculation
+						Calculation rewards
 					</div>
 
                     <div
@@ -81,9 +86,61 @@ export async function GET(request: Request) {
                             color: 'white',
                             lineHeight: 1,
                             whiteSpace: 'pre-wrap',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: '560px',
+                            gap: '24px'
                         }}
                     >
-                        {fid}
+                        <div style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}>
+                            <div style={{display: 'flex',}}>Your fid:</div> 
+                            <div style={{display: 'flex',}}>{fid}</div>
+                        </div>
+
+                        <div style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}>
+                            <div style={{display: 'flex',}}>Your points:</div>
+                            <div style={{display: 'flex',}}>{points}</div>
+                        </div>
+
+                        <div style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            flexDirection: 'column',
+                            gap: '24px'
+                        }}>
+                            <div style={{display: 'flex',}}>Your multipliers: </div>
+                            <div style={{
+                                display: 'flex',
+                                paddingLeft: '100px'
+                            }}>
+                                {power === "true" ? '✅' : '❌'} power badge
+                            </div>
+                            <div style={{
+                                display: 'flex',
+                                paddingLeft: '100px'
+                            }}>
+                                {power === "true" ? '✅' : '❌'} over 200k tokens
+                            </div>
+                        </div>
+
+                        <div style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}>
+                            <div style={{display: 'flex',}}>Your tokens:</div>
+                            <div style={{display: 'flex',}}>{tokens}</div>
+                        </div>
+                        
                     </div>
 
 					<div
@@ -114,13 +171,13 @@ export async function GET(request: Request) {
 			{
 				width: 960,
 				height: 960,
-				// fonts: [
-				// 	{
-				// 	  name: 'Geist',
-				// 	  data: fontData,
-				// 	  style: 'normal',
-				// 	},
-				//   ],
+				fonts: [
+					{
+					  name: 'Geist',
+					  data: fontData,
+					  style: 'normal',
+					},
+				  ],
 			},
 		);
 	} catch (e: any) {
