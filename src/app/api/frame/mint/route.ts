@@ -118,14 +118,14 @@ export async function POST(req: NextRequest): Promise<Response> {
         account: account,
       })
        
-      const serializedTransaction = await walletClient.signTransaction(request);
+      //const serializedTransaction = await walletClient.signTransaction(request);
 
     if (!request) {
       throw new Error('Could not simulate contract');
     }
 
     try {
-        const hash = await walletClient.sendRawTransaction({ serializedTransaction });
+        const hash = await walletClient.writeContract(request);
 
         if (hash) {
             await updateRecieveDrop(fid_new, true);
