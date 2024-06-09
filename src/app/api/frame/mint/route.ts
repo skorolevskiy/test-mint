@@ -106,11 +106,9 @@ export async function POST(req: NextRequest): Promise<Response> {
         wallet = User.wallet.slice(1, -1);
     }
 
-    console.warn(MINTER_PRIVATE_KEY);
-
     const account = privateKeyToAccount(MINTER_PRIVATE_KEY); 
 
-    const request: any = await publicClient.simulateContract({
+    const { request } = await publicClient.simulateContract({
         address: CONTRACT_ADDRESS,
         abi: abi,
         functionName: 'transfer',
@@ -123,6 +121,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (!request) {
       throw new Error('Could not simulate contract');
     }
+
+    console.warn(request);
 
     try {
         const hash = await walletClient.writeContract(request);
