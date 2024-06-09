@@ -108,14 +108,14 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     console.warn(MINTER_PRIVATE_KEY);
 
-    const privateKey = privateKeyToAccount(MINTER_PRIVATE_KEY); 
+    const account = privateKeyToAccount(MINTER_PRIVATE_KEY); 
 
     const request: any = await publicClient.simulateContract({
         address: CONTRACT_ADDRESS,
         abi: abi,
-        account: privateKey,
         functionName: 'transferFrom',
-        args: [ privateKey, wallet, parseEther("100")],
+        args: [ account.address, wallet, parseEther("100")],
+        account: account,
       })
        
       const serializedTransaction = await walletClient.signTransaction(request);
