@@ -19,6 +19,8 @@ const publicClient = createPublicClient({
   transport,
 });
 
+let fid: string | null, power_badge: boolean;
+
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest): Promise<Response> {
@@ -33,10 +35,8 @@ export async function POST(req: NextRequest): Promise<Response> {
       throw new Error('Invalid frame request');
     }
 
-    const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
-    const power_badge = status?.action?.interactor?.power_badge ? status.action.interactor.power_badge : null;
-
-    
+    fid = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
+    power_badge = status?.action?.interactor?.power_badge ? status.action.interactor.power_badge : null;
 
     return getResponse(ResponseType.SUCCESS);
   } catch (error) {
@@ -59,7 +59,7 @@ function getResponse(type: ResponseType) {
     type === ResponseType.ERROR;
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
-    <meta property="fc:frame:image" content="${SITE_URL}/api/frame/get-calculate" />
+    <meta property="fc:frame:image" content="${SITE_URL}/api/frame/get-calculate?fid=${fid}" />
     <meta property="fc:frame:image:aspect_ratio" content="1:1" />
     <meta property="fc:frame:post_url" content="${SITE_URL}/api/frame" />
     ${
