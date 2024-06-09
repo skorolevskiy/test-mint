@@ -18,6 +18,7 @@
     "@vercel/og": "^0.6.2",
     "@vercel/postgres": "^0.8.0",
     "@vercel/postgres-kysely": "^0.8.0",
+    "kysely": "^0.27.3",
     "next": "^14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
