@@ -5,13 +5,7 @@ import dataJson from './../eligible.json';
 // App router includes @vercel/og.
 // No need to install it.
 
-let fid: string | null, username: string, points: number, power: string | null, tokens: number, position: number | false, amount: number;
-
-interface Player {
-	fid: string;
-	username: string,
-	points: number;
-}
+let fid: string | null, username: string, points: number, power: string | null, tokens: number, position: number | false, amount: number, numberPosition: number;
 
 type FidEntry = {
 	position: number;
@@ -52,9 +46,10 @@ export async function GET(request: Request) {
 		const data: FidEntry[] = dataJson;
 
     	position = findFidPosition(data, Number(fid));
+		
 
 		if (position !== false) {
-			const numberPosition: number = position;
+			numberPosition = position;
 			if (numberPosition > 500) {
 				tokens = 2000;
 			}
@@ -139,7 +134,10 @@ export async function GET(request: Request) {
                             <div style={{display: 'flex',}}>{points}</div>
                         </div>
 
-                        <div style={{
+						{numberPosition > 500 ?
+						''
+						:
+						<div style={{
                             width: '100%',
                             display: 'flex',
                             justifyContent: 'space-between',
@@ -160,6 +158,9 @@ export async function GET(request: Request) {
                                 {amount > 200000 ? '✅' : '❌'} over 200k tokens
                             </div>
                         </div>
+						}
+						
+                        
 
                         <div style={{
                             width: '100%',
