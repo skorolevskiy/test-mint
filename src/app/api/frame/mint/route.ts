@@ -34,7 +34,7 @@ type FidEntry = {
 	position: number;
 	fid: number;
   };
-let points: number, power: string | null, tokens: number, position: number | false;
+let points: number, power: string | null, tokens: number, position: number | false, checkTokens: number;
 
 export const dynamic = 'force-dynamic';
 
@@ -89,16 +89,12 @@ export async function POST(req: NextRequest): Promise<Response> {
     const threshold: number = 200000;
 	
     if (balanceInTokens1 >= threshold || balanceInTokens2 >= threshold) {
-        console.warn(balanceInTokens1);
-        console.warn(balanceInTokens2);
-        // if (balanceInTokens1 >= threshold) {
-        // 	await updateWallet(fid_new, JSON.stringify(address1));
-        // } else if (balanceInTokens2 >= threshold) {
-        // 	await updateWallet(fid_new, JSON.stringify(address2));
-        // }
+        if (balanceInTokens1 >= threshold) {
+        	checkTokens = balanceInTokens1;
+        } else if (balanceInTokens2 >= threshold) {
+        	checkTokens = balanceInTokens2;
+        }
     } else {
-        console.warn('1 need more token ' + balanceInTokens1 + ' - ' + address1);
-        console.warn('2 need more token ' + balanceInTokens2 + ' - ' + address2);
         return getResponse(ResponseType.NEED_TOKEN);
     }
 
@@ -120,7 +116,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         return getResponse(ResponseType.ALREADY_MINTED);
     }
 
-    if(power === "true") {
+    if(power === "true" || checkTokens > threshold) {
         tokens = points * 2;
     } else {
         tokens = points;
@@ -137,7 +133,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         }
     }
 
-    console.log(JSON.stringify(tokens));
+    let tokensString = JSON.stringify(tokens);
 
     const account = privateKeyToAccount(MINTER_PRIVATE_KEY); 
 
@@ -145,7 +141,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         address: CONTRACT_ADDRESS,
         abi: abi,
         functionName: 'transfer',
-        args: [ wallet, parseEther("100")],
+        args: [ wallet, parseEther(tokensString)],
         account: account,
       })
        
