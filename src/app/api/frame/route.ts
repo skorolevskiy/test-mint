@@ -36,6 +36,8 @@ export async function POST(req: NextRequest): Promise<Response> {
       throw new Error('Invalid frame request');
     }
 
+    const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
+
     // Check if user has liked and recasted
     // const hasLikedAndRecasted =
     //   !!status?.action?.cast?.viewer_context?.liked &&
@@ -45,7 +47,18 @@ export async function POST(req: NextRequest): Promise<Response> {
     //   return getResponse(ResponseType.RECAST);
     // }
 
-    const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
+    // Check if user has liked and recasted
+    const userFollow = await userInfo(fid_new);
+    let subs;
+
+    if (!userFollow?.users) {
+      console.error(userFollow);
+      throw new Error('Invalid frame request');
+    } else {
+      subs = userFollow?.users[0].viewer_context?.following;
+      console.warn(subs);
+    }
+    
     let address: string, recieveDrop: boolean;
     // Check if user has an address connected
     const address1: Address | undefined =
@@ -152,7 +165,7 @@ function getResponse(type: ResponseType) {
         		<meta name="fc:frame:button:2:target" content="https://app.uniswap.org/swap?chain=base&inputCurrency=ETH&outputCurrency=0x388e543a5a491e7b42e3fbcd127dd6812ea02d0d" />
 				`
 			: `
-        <meta name="fc:frame:button:1" content="Check eligible" />
+        <meta name="fc:frame:button:1" content="Eligibility Checker" />
         <meta name="fc:frame:button:1:action" content="post" />
         <meta name="fc:frame:button:1:target" content="${SITE_URL}/api/frame/eligible/" />
       `
@@ -176,6 +189,27 @@ async function validateFrameRequest(data: string | undefined) {
 
   return await fetch(
     'https://api.neynar.com/v2/farcaster/frame/validate',
+    options,
+  )
+    .then((response) => response.json())
+    .catch((err) => console.error(err));
+}
+
+async function userInfo(data: string | null) {
+  if (!NEYNAR_API_KEY) throw new Error('NEYNAR_API_KEY is not set');
+  if (!data) throw new Error('No data provided');
+
+  const options = {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      api_key: NEYNAR_API_KEY,
+      'content-type': 'application/json',
+    },
+  };
+
+  return await fetch(
+    'https://api.neynar.com/v2/farcaster/user/bulk?fids=412772&viewer_fid='+ {data},
     options,
   )
     .then((response) => response.json())

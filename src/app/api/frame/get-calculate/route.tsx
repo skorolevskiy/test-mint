@@ -35,6 +35,7 @@ export async function GET(request: Request) {
 			points = 0;
 		} else {
 			points = user.points;
+			username = user.username.slice(1, -1);
 		}
 
         if(power === "true" || amount > 200000) {
@@ -88,7 +89,7 @@ export async function GET(request: Request) {
 							whiteSpace: 'pre-wrap',
 						}}
 					>
-						Calculation rewards
+						Calculation results
 					</div>
 
                     <div
@@ -112,7 +113,7 @@ export async function GET(request: Request) {
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                            <div style={{display: 'flex',}}>Your fid:</div> 
+                            <div style={{display: 'flex',}}>Fid:</div> 
                             <div style={{display: 'flex',}}>{fid}</div>
                         </div>
 
@@ -121,7 +122,16 @@ export async function GET(request: Request) {
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                            <div style={{display: 'flex',}}>Your position:</div>
+                            <div style={{display: 'flex',}}>Username:</div> 
+                            <div style={{display: 'flex',}}>{'@' + username}</div>
+                        </div>
+
+						<div style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}>
+                            <div style={{display: 'flex',}}>Position:</div>
                             <div style={{display: 'flex',}}>{position}</div>
                         </div>
 
@@ -130,7 +140,7 @@ export async function GET(request: Request) {
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                            <div style={{display: 'flex',}}>Your points:</div>
+                            <div style={{display: 'flex',}}>Points:</div>
                             <div style={{display: 'flex',}}>{points}</div>
                         </div>
 
@@ -144,7 +154,7 @@ export async function GET(request: Request) {
                             flexDirection: 'column',
                             gap: '24px'
                         }}>
-                            <div style={{display: 'flex',}}>Your multipliers: </div>
+                            <div style={{display: 'flex',}}>Multipliers: </div>
                             <div style={{
                                 display: 'flex',
                                 paddingLeft: '100px'
@@ -167,7 +177,7 @@ export async function GET(request: Request) {
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                            <div style={{display: 'flex',}}>Your tokens:</div>
+                            <div style={{display: 'flex',}}>Your rewards:</div>
                             <div style={{display: 'flex',}}>{tokens}</div>
                         </div>
                         

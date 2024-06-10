@@ -14,7 +14,7 @@ const imageData: FrameImageMetadata = {
 
 export const FRAME_METADATA = getFrameMetadata({
   buttons: [{
-		label: 'Check results',
+		label: 'Eligibility Checker',
 	},],
   image: imageData,
   post_url: `${SITE_URL}/api/frame`,
