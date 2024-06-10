@@ -97,15 +97,20 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
     const power_badge = status?.action?.interactor?.power_badge ? status.action.interactor.power_badge : null;
+    let address: string, recieveDrop: boolean;
 
     const User = await getUser(fid_new);
     let wallet;
     if (!User) {
         return getResponse(ResponseType.ERROR);
     } else {
-        wallet = User.wallet.slice(1, -1);
+      wallet = User.wallet.slice(1, -1);
+      recieveDrop = User.recievedrop;
     }
-
+  
+    if (recieveDrop) {
+        return getResponse(ResponseType.ALREADY_MINTED);
+    }
     const account = privateKeyToAccount(MINTER_PRIVATE_KEY); 
 
     const { request } = await publicClient.simulateContract({
@@ -150,6 +155,7 @@ enum ResponseType {
   NEED_TOKEN,
   ERROR,
   NO_ADDRESS,
+  ALREADY_MINTED
 }
 
 function getResponse(type: ResponseType) {
@@ -158,6 +164,7 @@ function getResponse(type: ResponseType) {
     [ResponseType.ERROR]: 'status/error.png',
     [ResponseType.NEED_TOKEN]: 'status/error.png',
     [ResponseType.NO_ADDRESS]: 'status/no-address.png',
+    [ResponseType.ALREADY_MINTED]: 'status/congrats.gif',
   }[type];
   const shouldRetry =
     type === ResponseType.ERROR;
