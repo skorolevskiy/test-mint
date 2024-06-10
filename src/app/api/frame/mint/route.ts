@@ -152,7 +152,7 @@ enum ResponseType {
 
 function getResponse(type: ResponseType) {
   const IMAGE = {
-    [ResponseType.SUCCESS]: 'status/success.png',
+    [ResponseType.SUCCESS]: 'status/congrats.gif',
     [ResponseType.ERROR]: 'status/error.png',
     [ResponseType.NEED_TOKEN]: 'status/error.png',
     [ResponseType.NO_ADDRESS]: 'status/no-address.png',

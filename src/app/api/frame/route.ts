@@ -131,7 +131,7 @@ function getResponse(type: ResponseType) {
   const IMAGE = {
     [ResponseType.SUCCESS]: 'status/end.png',
     [ResponseType.RECAST]: 'status/recast.png',
-    [ResponseType.ALREADY_MINTED]: 'status/already-minted.png',
+    [ResponseType.ALREADY_MINTED]: 'status/congrats.gif',
     [ResponseType.NO_ADDRESS]: 'status/no-address.png',
     [ResponseType.NEED_TOKEN]: 'status/need-token.png',
     [ResponseType.ERROR]: 'status/error.png',
