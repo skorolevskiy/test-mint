@@ -5,7 +5,7 @@ import dataJson from './eligible.json';
 // App router includes @vercel/og.
 // No need to install it.
 
-let fid: string | null, username: string, points: number, power: string | null, tokens: number, position: number | false;
+let fid: string | null, username: string, points: number, power: string | null, tokens: number, position: number | false, amount: number;
 
 interface Player {
 	fid: string;
@@ -32,6 +32,9 @@ export async function GET(request: Request) {
         const hasPower = searchParams.has('power');
 		power = hasPower ? searchParams.get('power') : null;
 
+		const hasTokens = searchParams.has('tokens');
+		amount = hasTokens ? Number(searchParams.get('tokens')) : 0;
+
 		const user = await getUser(fid);
 
 		if (!user) {
@@ -40,7 +43,7 @@ export async function GET(request: Request) {
 			points = user.points;
 		}
 
-        if(power === "true") {
+        if(power === "true" || amount > 200000) {
             tokens = points * 2;
         } else {
             tokens = points;
@@ -154,7 +157,7 @@ export async function GET(request: Request) {
                                 display: 'flex',
                                 paddingLeft: '100px'
                             }}>
-                                {power === "true" ? '✅' : '❌'} over 200k tokens
+                                {amount > 200000 ? '✅' : '❌'} over 200k tokens
                             </div>
                         </div>
 
