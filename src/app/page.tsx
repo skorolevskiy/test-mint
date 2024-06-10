@@ -10,6 +10,14 @@ export const metadata: Metadata = {
   metadataBase: SITE_URL ? new URL(SITE_URL) : undefined,
   title: 'Pill Claim Frame',
   other: FRAME_METADATA,
+  openGraph: {
+       type: "website",
+       url: "https://pillonbase.vercel.app",
+       title: "Pill Claim Frame",
+       images: [{
+         url: "https://pillonbase.vercel.app/status/og.png",
+       }],
+     }
 };
 
 export default function Home() {
