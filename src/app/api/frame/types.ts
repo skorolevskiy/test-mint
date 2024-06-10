@@ -9,7 +9,7 @@ export interface PlayersTable {
 	name: string | null;
 	points: number;
 	dailySpins: number;
-	receiveDrop: boolean;
+	recievedrop: boolean;
 	lastSpin: kysely.ColumnType<Date, string | undefined, never>;
 	createdAt: kysely.ColumnType<Date, string | undefined, never>;
 	refFid: string | null;
@@ -53,7 +53,7 @@ export async function updateRecieveDrop(fid: string | null, newValue: boolean): 
 	await db
 		.updateTable('spiners')
 		.set({
-			receiveDrop: newValue
+			recievedrop: newValue
 		  })
 		.where('fid', '=', fid)
 		.executeTakeFirst()
