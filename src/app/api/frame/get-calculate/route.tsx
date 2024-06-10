@@ -1,16 +1,22 @@
 import { SITE_URL } from '@/config';
 import { ImageResponse } from 'next/og';
 import { getUser } from '../types';
+import dataJson from './eligible.json';
 // App router includes @vercel/og.
 // No need to install it.
 
-let fid: string | null, username: string, points: number, power: string | null, tokens: number;
+let fid: string | null, username: string, points: number, power: string | null, tokens: number, position: number | false;
 
 interface Player {
 	fid: string;
 	username: string,
 	points: number;
 }
+
+type FidEntry = {
+	position: number;
+	fid: number;
+  };
 
 export async function GET(request: Request) {
 	const fontData = await fetch(
@@ -39,6 +45,19 @@ export async function GET(request: Request) {
         } else {
             tokens = points;
         }
+
+		const data: FidEntry[] = dataJson;
+
+    	position = findFidPosition(data, Number(fid));
+
+		if (position !== false) {
+			const numberPosition: number = position;
+			if (numberPosition > 500) {
+				tokens = 2000;
+			}
+		} else {
+			return false;
+		}
 
 		// const topPlayers: Player[] = await getTopPlayers();
 
@@ -99,6 +118,15 @@ export async function GET(request: Request) {
                         }}>
                             <div style={{display: 'flex',}}>Your fid:</div> 
                             <div style={{display: 'flex',}}>{fid}</div>
+                        </div>
+
+						<div style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}>
+                            <div style={{display: 'flex',}}>Your position:</div>
+                            <div style={{display: 'flex',}}>{position}</div>
                         </div>
 
                         <div style={{
@@ -187,3 +215,8 @@ export async function GET(request: Request) {
 		});
 	}
 }
+
+const findFidPosition = (data: FidEntry[], fidToFind: number): number | false => {
+	const index = data.findIndex(entry => entry.fid === fidToFind);
+	return index !== -1 ? index : false;
+  };
