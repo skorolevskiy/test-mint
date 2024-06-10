@@ -57,6 +57,9 @@ export async function POST(req: NextRequest): Promise<Response> {
     } else {
       subs = userFollow?.users[0].viewer_context?.following;
       console.warn(subs);
+      if (!subs) {
+        return getResponse(ResponseType.RECAST);
+      }
     }
     
     let address: string, recieveDrop: boolean;
