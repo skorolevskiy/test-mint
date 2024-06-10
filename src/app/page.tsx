@@ -12,10 +12,9 @@ export const metadata: Metadata = {
   other: FRAME_METADATA,
   openGraph: {
        type: "website",
-       url: "https://pillonbase.vercel.app",
        title: "Pill Claim Frame",
        images: [{
-         url: "https://pillonbase.vercel.app/status/og.png",
+         url: "https://test-pill.vercel.app/status/og.png",
        }],
      }
 };
