@@ -6,9 +6,10 @@ const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
 
 export const dynamic = 'force-dynamic';
 
-interface FidEntry {
-    fid: number;
-  }
+type FidEntry = {
+  position: number;
+  fid: number;
+};
 
 export async function POST(req: NextRequest): Promise<Response> {
   try {
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     const data: FidEntry[] = dataJson;
 
-    const result = findFid(data, Number(fid_new));
+    const result = findFidPosition(data, Number(fid_new));
 
     if (!result) {
         return getResponse(ResponseType.NOT_ELIGIBLE);
@@ -95,6 +96,7 @@ async function validateFrameRequest(data: string | undefined) {
     .catch((err) => console.error(err));
 }
 
-const findFid = (data: FidEntry[], fidToFind: number): boolean => {
-    return data.some(entry => entry.fid === fidToFind);
-  };
+const findFidPosition = (data: FidEntry[], fidToFind: number): number | false => {
+  const entry = data.find(entry => entry.fid === fidToFind);
+  return entry ? entry.position : false;
+};
