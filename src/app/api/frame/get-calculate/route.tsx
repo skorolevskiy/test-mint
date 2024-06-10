@@ -55,8 +55,6 @@ export async function GET(request: Request) {
 			if (numberPosition > 500) {
 				tokens = 2000;
 			}
-		} else {
-			return false;
 		}
 
 		// const topPlayers: Player[] = await getTopPlayers();
