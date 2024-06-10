@@ -200,7 +200,7 @@ async function userInfo(data: string | null) {
   if (!data) throw new Error('No data provided');
 
   const options = {
-    method: 'POST',
+    method: 'GET',
     headers: {
       accept: 'application/json',
       api_key: NEYNAR_API_KEY,
