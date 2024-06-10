@@ -13,7 +13,7 @@ import {
 } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { getUser, updateRecieveDrop } from './../types';
-import dataJson from './eligible.json';
+import dataJson from './../eligible.json';
 
 const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
 const MINTER_PRIVATE_KEY = process.env.MINTER_PRIVATE_KEY as Hex | undefined;

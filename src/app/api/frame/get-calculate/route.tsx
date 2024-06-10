@@ -1,7 +1,7 @@
 import { SITE_URL } from '@/config';
 import { ImageResponse } from 'next/og';
 import { getUser } from '../types';
-import dataJson from './eligible.json';
+import dataJson from './../eligible.json';
 // App router includes @vercel/og.
 // No need to install it.
 

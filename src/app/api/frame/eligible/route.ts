@@ -1,6 +1,6 @@
 import { CHAIN, CONTRACT_ADDRESS, SITE_URL } from '@/config';
 import { NextRequest, NextResponse } from 'next/server';
-import dataJson from './eligible.json'
+import dataJson from './../eligible.json'
 
 const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
 
