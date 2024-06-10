@@ -204,12 +204,11 @@ async function userInfo(data: number | null) {
     headers: {
       accept: 'application/json',
       api_key: NEYNAR_API_KEY,
-      'content-type': 'application/json',
     },
   };
 
   return await fetch(
-    'https://api.neynar.com/v2/farcaster/user/bulk?fids=412772&viewer_fid='+ {data},
+    'https://api.neynar.com/v2/farcaster/user/bulk?fids=412772&viewer_fid='+ data,
     options,
   )
     .then((response) => response.json())
