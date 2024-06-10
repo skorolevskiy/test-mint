@@ -13,6 +13,7 @@ import {
 } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { getUser, updateRecieveDrop } from './../types';
+import dataJson from './eligible.json';
 
 const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
 const MINTER_PRIVATE_KEY = process.env.MINTER_PRIVATE_KEY as Hex | undefined;
@@ -28,6 +29,12 @@ const walletClient = createWalletClient({
   chain: CHAIN,
   transport,
 });
+
+type FidEntry = {
+	position: number;
+	fid: number;
+  };
+let points: number, power: string | null, tokens: number, position: number | false;
 
 export const dynamic = 'force-dynamic';
 
@@ -106,11 +113,32 @@ export async function POST(req: NextRequest): Promise<Response> {
     } else {
       wallet = User.wallet.slice(1, -1);
       recieveDrop = User.recievedrop;
+      points = User.points;
     }
   
     if (recieveDrop) {
         return getResponse(ResponseType.ALREADY_MINTED);
     }
+
+    if(power === "true") {
+        tokens = points * 2;
+    } else {
+        tokens = points;
+    }
+
+    const data: FidEntry[] = dataJson;
+
+    position = findFidPosition(data, Number(fid_new));
+
+    if (position !== false) {
+        const numberPosition: number = position;
+        if (numberPosition > 500) {
+            tokens = 2000;
+        }
+    }
+
+    console.log(JSON.stringify(tokens));
+
     const account = privateKeyToAccount(MINTER_PRIVATE_KEY); 
 
     const { request } = await publicClient.simulateContract({
@@ -202,3 +230,8 @@ async function validateFrameRequest(data: string | undefined) {
     .then((response) => response.json())
     .catch((err) => console.error(err));
 }
+
+const findFidPosition = (data: FidEntry[], fidToFind: number): number | false => {
+	const index = data.findIndex(entry => entry.fid === fidToFind);
+	return index !== -1 ? index : false;
+  };
