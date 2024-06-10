@@ -104,7 +104,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     if (!User) {
         return getResponse(ResponseType.ERROR);
     } else {
-        recieveDrop = User.recieveDrop;
+        recieveDrop = User.recievedrop;
     }
 
     if (recieveDrop) {
