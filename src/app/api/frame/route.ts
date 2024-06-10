@@ -48,7 +48,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     // }
 
     // Check if user has liked and recasted
-    const userFollow = await userInfo(fid_new);
+    const userFollow = await userInfo(Number(fid_new));
     let subs;
 
     if (!userFollow?.users) {
@@ -195,7 +195,7 @@ async function validateFrameRequest(data: string | undefined) {
     .catch((err) => console.error(err));
 }
 
-async function userInfo(data: string | null) {
+async function userInfo(data: number | null) {
   if (!NEYNAR_API_KEY) throw new Error('NEYNAR_API_KEY is not set');
   if (!data) throw new Error('No data provided');
 
