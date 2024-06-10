@@ -143,6 +143,7 @@ function getResponse(type: ResponseType) {
     <meta property="fc:frame:image" content="${SITE_URL}/${IMAGE}" />
     <meta property="fc:frame:image:aspect_ratio" content="1:1" />
     <meta property="fc:frame:post_url" content="${SITE_URL}/api/frame" />
+    
     ${
       shouldRetry
         ? `<meta property="fc:frame:button:1" content="Try again" />
