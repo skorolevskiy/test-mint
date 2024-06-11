@@ -145,14 +145,9 @@ export async function POST(req: NextRequest): Promise<Response> {
         account: account,
       })
        
-      //const serializedTransaction = await walletClient.signTransaction(request);
-
     if (!request) {
       throw new Error('Could not simulate contract');
     }
-    //  else {
-    //   await updateRecieveDrop(fid_new, true);
-    // }
 
     console.warn(request);
 
@@ -161,6 +156,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
         if (hash) {
             await updateRecieveDrop(fid_new, true);
+            console.warn(fid_new + " receive drop");
             return getResponse(ResponseType.SUCCESS);
         }
     } catch (error) {
