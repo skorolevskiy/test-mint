@@ -135,6 +135,8 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     let tokensString = JSON.stringify(tokens);
 
+    console.warn(tokensString);
+
     const account = privateKeyToAccount(MINTER_PRIVATE_KEY); 
 
     const { request } = await publicClient.simulateContract({
