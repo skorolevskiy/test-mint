@@ -52,11 +52,11 @@ export async function POST(req: NextRequest): Promise<Response> {
     let subs;
 
     if (!userFollow?.users) {
-      console.error(userFollow);
+      console.error('not follow');
       throw new Error('Invalid frame request');
     } else {
       subs = userFollow?.users[0].viewer_context?.following;
-      console.warn(subs);
+      console.warn('followed');
       if (!subs) {
         return getResponse(ResponseType.RECAST);
       }
