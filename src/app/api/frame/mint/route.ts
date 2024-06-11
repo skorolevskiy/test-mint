@@ -105,6 +105,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     const User = await getUser(fid_new);
     let wallet;
     if (!User) {
+      console.warn('user not found')
         return getResponse(ResponseType.ERROR);
     } else {
       wallet = User.wallet.slice(1, -1);
@@ -116,7 +117,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         return getResponse(ResponseType.ALREADY_MINTED);
     }
 
-    if(power === "true" || checkTokens > threshold) {
+    if(power_badge === true || checkTokens > threshold) {
         tokens = points * 2;
     } else {
         tokens = points;
