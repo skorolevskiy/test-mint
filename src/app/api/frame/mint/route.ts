@@ -105,7 +105,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     const User = await getUser(fid_new);
     let wallet;
     if (!User) {
-      console.warn('user not found')
+        console.warn('user not found')
         return getResponse(ResponseType.ERROR);
     } else {
       wallet = User.wallet.slice(1, -1);
@@ -185,12 +185,12 @@ function getResponse(type: ResponseType) {
   const IMAGE = {
     [ResponseType.SUCCESS]: 'status/congrats.gif',
     [ResponseType.ERROR]: 'status/error.png',
-    [ResponseType.NEED_TOKEN]: 'status/error.png',
+    [ResponseType.NEED_TOKEN]: 'status/need-token.png',
     [ResponseType.NO_ADDRESS]: 'status/no-address.png',
     [ResponseType.ALREADY_MINTED]: 'status/congrats.gif',
   }[type];
   const shouldRetry =
-    type === ResponseType.ERROR;
+    type === ResponseType.ERROR || type === ResponseType.ALREADY_MINTED;
   return new NextResponse(`<!DOCTYPE html><html><head>
     <meta property="fc:frame" content="vNext" />
     <meta property="fc:frame:image" content="${SITE_URL}/${IMAGE}" />
