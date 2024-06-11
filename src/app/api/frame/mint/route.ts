@@ -94,8 +94,6 @@ export async function POST(req: NextRequest): Promise<Response> {
         } else if (balanceInTokens2 >= threshold) {
         	checkTokens = balanceInTokens2;
         }
-    } else {
-        return getResponse(ResponseType.NEED_TOKEN);
     }
 
     const fid_new = status?.action?.interactor?.fid ? JSON.stringify(status.action.interactor.fid) : null;
