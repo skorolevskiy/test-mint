@@ -58,3 +58,14 @@ export async function updateRecieveDrop(fid: string | null, newValue: boolean): 
 		.where('fid', '=', fid)
 		.executeTakeFirst()
 }
+
+export async function getAllUsers() {
+	let data: any;
+	data = await db
+			.selectFrom('spiners')
+			.selectAll()
+			.orderBy('points desc')
+			.where('recievedrop', '=', true)
+			.execute();
+	return data;
+}
