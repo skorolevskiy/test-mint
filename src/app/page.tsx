@@ -14,7 +14,7 @@ export const metadata: Metadata = {
        type: "website",
        title: "Pill Claim Frame",
        images: [{
-         url: "https://test-pill.vercel.app/status/og.png",
+         url: "https://pillonbase.vercel.app/status/og.png",
        }],
      }
 };
