@@ -169,7 +169,9 @@ function getResponse(type: ResponseType) {
 				`
 			: 
       `
-        
+        <meta name="fc:frame:button:1" content="Eligibility Checker" />
+        <meta name="fc:frame:button:1:action" content="post" />
+        <meta name="fc:frame:button:1:target" content="${SITE_URL}/api/frame/eligible/" />
       `
     }
   </head></html>`);
